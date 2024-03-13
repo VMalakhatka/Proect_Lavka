@@ -11,7 +11,7 @@ import java.util.Objects;
 @Getter
 @Entity
 //@jakarta.persistence.Table(name = "ALL_ARTC", schema = "dbo", catalog = "Paint_Ua")
-@Table(name = "ALL_ARTC", schema = "dbo", catalog = "Paint_Ua")
+@Table(name = "ALL_ARTC")
 //@Table(name = "ALL_ARTC", schema = "dbo")
 public class AllArtcEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
