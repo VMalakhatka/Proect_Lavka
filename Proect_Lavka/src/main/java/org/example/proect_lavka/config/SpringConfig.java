@@ -1,11 +1,15 @@
 package org.example.proect_lavka.config;
 
 import com.github.javafaker.Faker;
+import org.example.proect_lavka.property.DatabaseProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -13,6 +17,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
+import javax.sql.DataSource;
 import java.util.Random;
 
 @Configuration
@@ -49,6 +54,22 @@ public class SpringConfig implements WebMvcConfigurer {
         viewResolver.setTemplateEngine(templateEngine());
         registry.viewResolver(viewResolver);
 
+    }
+
+    @Bean
+    @DependsOn("databaseProperties")
+    DataSource dataSource(DatabaseProperties databaseProperties) {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(databaseProperties.driverClassName());
+        dataSource.setUrl(databaseProperties.url());
+        dataSource.setUsername(databaseProperties.username());
+        dataSource.setPassword(databaseProperties.password());
+        return dataSource;
+    }
+
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 
     @Bean
